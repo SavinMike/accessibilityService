@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AppLauncher</string>
+    <string name="accessibility_service_label">App Launcher Service</string>
+    <string name="accessibility_service_description">Test service for lock apps</string>
+    <string name="lock_applications">Lock Applications</string>
+    <string name="lock_calls">Lock calls</string>
+</resources>
