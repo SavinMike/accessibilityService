@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.prototype.applauncher.SettingsActivity;
-import com.prototype.applauncher.service.AppLauncherService;
+import com.prototype.applauncher.service.AppLauncherAccessibilityService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +37,6 @@ public class OutgoingReceiver extends BroadcastReceiver
 			setResultData(null);
 			SettingsActivity.startActivity(context);
 		}
-		Log.d(AppLauncherService.TAG, "Outgoing: " + number);
+		Log.d(AppLauncherAccessibilityService.TAG, "Outgoing: " + number);
 	}
 }

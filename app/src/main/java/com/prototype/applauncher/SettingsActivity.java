@@ -1,7 +1,7 @@
 package com.prototype.applauncher;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
-import android.app.ActivityManager;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,15 +10,13 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.CompoundButton;
 
-import com.prototype.applauncher.service.AppLauncherService;
+import com.prototype.applauncher.service.ApplicationLauncherService;
 
 import java.util.List;
 
@@ -32,7 +30,6 @@ public class SettingsActivity extends AppCompatActivity
 
 	public static void startActivity(Context context)
 	{
-		((ActivityManager) context.getSystemService(ACTIVITY_SERVICE)).killBackgroundProcesses(context.getPackageName());
 		Intent intent = new Intent(context, SettingsActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(intent);
@@ -91,19 +88,21 @@ public class SettingsActivity extends AppCompatActivity
 			lockCalls.setChecked(mSharedPreferences.getBoolean(KEY_LOCK_CALLS, false));
 		}
 
-		if (!isAccessibilityEnabled(this, AppLauncherService.getServiceId(this)))
-		{
-			if (isSystemApp(getPackageName()))
-			{
-				Settings.Secure.putString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, AppLauncherService.getServiceId(this));
-				Settings.Secure.putString(getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED, "1");
-				Log.d(AppLauncherService.TAG, "IS USER APP");
-			}
-			else
-			{
-				startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-			}
-		}
+//		if (!isAccessibilityEnabled(this, AppLauncherAccessibilityService.getServiceId(this)))
+//		{
+//			if (isSystemApp(getPackageName()))
+//			{
+//				Settings.Secure.putString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, AppLauncherAccessibilityService.getServiceId(this));
+//				Settings.Secure.putString(getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED, "1");
+//				Log.d(AppLauncherAccessibilityService.TAG, "IS USER APP");
+//			}
+//			else
+//			{
+//				startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+//			}
+//		}
+
+		startService(new Intent(this, ApplicationLauncherService.class));
 	}
 
 	private void removeOthersSettingsActivity()
@@ -120,6 +119,7 @@ public class SettingsActivity extends AppCompatActivity
 		super.onDestroy();
 	}
 
+	@SuppressLint("PackageManagerGetSignatures")
 	public boolean isSystemApp(String packageName)
 	{
 		PackageManager packageManager = getPackageManager();
